@@ -3,6 +3,7 @@ import { AggregateRoot } from "@your-harness/shared";
 import { ReleaseId } from "./release-id.js";
 import { ReleaseStatus } from "./release-status.js";
 import { ReleaseVersion } from "./release-version.js";
+import { InvalidReleaseTransitionError } from "./errors/index.js";
 
 /**
  * Represents a consistent engineering baseline ready to be published.
@@ -31,44 +32,47 @@ export class Release extends AggregateRoot<ReleaseId> {
   }
 
   markReady(): Release {
-    if (this.status !== ReleaseStatus.Draft) {
-      throw new Error(
-        "Only draft releases can be marked as ready."
-      );
-    }
-
-    return new Release(
-      this.id,
-      this.version,
+  if (this.status !== ReleaseStatus.Draft) {
+    throw new InvalidReleaseTransitionError(
+      this.status,
       ReleaseStatus.Ready
     );
   }
 
-  publish(): Release {
-    if (this.status !== ReleaseStatus.Ready) {
-      throw new Error(
-        "Only ready releases can be published."
-      );
-    }
+  return new Release(
+    this.id,
+    this.version,
+    ReleaseStatus.Ready
+  );
+}
 
-    return new Release(
-      this.id,
-      this.version,
+  publish(): Release {
+  if (this.status !== ReleaseStatus.Ready) {
+    throw new InvalidReleaseTransitionError(
+      this.status,
       ReleaseStatus.Released
     );
   }
 
-  deprecate(): Release {
-    if (this.status !== ReleaseStatus.Released) {
-      throw new Error(
-        "Only released versions can be deprecated."
-      );
-    }
+  return new Release(
+    this.id,
+    this.version,
+    ReleaseStatus.Released
+  );
+}
 
-    return new Release(
-      this.id,
-      this.version,
+  deprecate(): Release {
+  if (this.status !== ReleaseStatus.Released) {
+    throw new InvalidReleaseTransitionError(
+      this.status,
       ReleaseStatus.Deprecated
     );
   }
+
+  return new Release(
+    this.id,
+    this.version,
+    ReleaseStatus.Deprecated
+  );
+}
 }
