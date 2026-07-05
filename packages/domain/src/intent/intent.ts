@@ -3,6 +3,7 @@ import { AggregateRoot } from "@your-harness/shared";
 import { IntentId } from "./intent-id.js";
 import { IntentStatus } from "./intent-status.js";
 import { IntentTitle } from "./intent-title.js";
+import { InvalidIntentTransitionError } from "./errors/index.js";
 
 /**
  * Represents an engineering intent.
@@ -39,57 +40,61 @@ export class Intent extends AggregateRoot<IntentId> {
 
   approve(): Intent {
     if (this.status !== IntentStatus.Draft) {
-      throw new Error(
-        "Only draft intents can be approved."
-      );
-    }
-
-    return new Intent(
-      this.id,
-      this.title,
+    throw new InvalidIntentTransitionError(
+      this.status,
       IntentStatus.Approved
     );
   }
 
+  return new Intent(
+    this.id,
+    this.title,
+    IntentStatus.Approved
+  );
+  }
+
   start(): Intent {
     if (this.status !== IntentStatus.Approved) {
-      throw new Error(
-        "Only approved intents can be started."
-      );
-    }
-
-    return new Intent(
-      this.id,
-      this.title,
+    throw new InvalidIntentTransitionError(
+      this.status,
       IntentStatus.InProgress
     );
   }
 
+  return new Intent(
+    this.id,
+    this.title,
+    IntentStatus.InProgress
+  );
+  }
+
   complete(): Intent {
     if (this.status !== IntentStatus.InProgress) {
-      throw new Error(
-        "Only in-progress intents can be completed."
-      );
-    }
-
-    return new Intent(
-      this.id,
-      this.title,
+    throw new InvalidIntentTransitionError(
+      this.status,
       IntentStatus.Completed
     );
   }
 
+  return new Intent(
+    this.id,
+    this.title,
+    IntentStatus.Completed
+  );
+  }
+
   cancel(): Intent {
     if (this.status === IntentStatus.Completed) {
-      throw new Error(
-        "Completed intents cannot be cancelled."
-      );
-    }
-
-    return new Intent(
-      this.id,
-      this.title,
+    throw new InvalidIntentTransitionError(
+      this.status,
       IntentStatus.Cancelled
     );
+  }
+
+  return new Intent(
+    this.id,
+    this.title,
+    IntentStatus.Cancelled
+  );
   }
 }
