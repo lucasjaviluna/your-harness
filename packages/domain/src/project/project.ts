@@ -1,4 +1,5 @@
 import { AggregateRoot } from "@your-harness/shared";
+import { ProjectId } from "./project-id.js";
 
 /**
  * Represents an engineering project managed by Your Harness.
@@ -6,7 +7,7 @@ import { AggregateRoot } from "@your-harness/shared";
  * A Project is the root aggregate of the engineering domain.
  * Every engineering artifact belongs to exactly one Project.
  */
-export class Project extends AggregateRoot<string> {
+export class Project extends AggregateRoot<ProjectId> {
   readonly #name: string;
 
   constructor(id: string, name: string) {
