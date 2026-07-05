@@ -1,17 +1,22 @@
+import { Identifier } from "../identifiers/index.js";
+
 /**
- * Represents the root of an aggregate.
+ * Base class for aggregate roots.
  *
- * Aggregate roots are responsible for protecting the consistency
- * of their aggregate boundaries.
+ * Every aggregate root owns a strongly typed identifier.
  */
-export abstract class AggregateRoot<TId> {
-  protected constructor(private readonly _id: TId) {}
+export abstract class AggregateRoot<
+  TId extends Identifier<string>
+> {
+  protected constructor(
+    private readonly _id: TId
+  ) {}
 
   get id(): TId {
     return this._id;
   }
 
   equals(other: AggregateRoot<TId>): boolean {
-    return this._id === other.id;
+    return this.id.equals(other.id);
   }
 }
