@@ -1,23 +1,21 @@
+import { AggregateRoot } from "@your-harness/shared";
+
 /**
  * Represents an engineering project managed by Your Harness.
  *
  * A Project is the root aggregate of the engineering domain.
  * Every engineering artifact belongs to exactly one Project.
  */
-export class Project {
-  readonly #id: string;
+export class Project extends AggregateRoot<string> {
   readonly #name: string;
 
   constructor(id: string, name: string) {
-    this.#validateId(id);
-    this.#validateName(name);
+    Project.validateId(id);
+    Project.validateName(name);
 
-    this.#id = id;
+    super(id);
+
     this.#name = name;
-  }
-
-  get id(): string {
-    return this.#id;
   }
 
   get name(): string {
@@ -25,18 +23,18 @@ export class Project {
   }
 
   rename(name: string): Project {
-    this.#validateName(name);
+    Project.validateName(name);
 
-    return new Project(this.#id, name);
+    return new Project(this.id, name);
   }
 
-  #validateId(id: string): void {
+  private static validateId(id: string): void {
     if (id.trim().length === 0) {
       throw new Error("Project id cannot be empty.");
     }
   }
 
-  #validateName(name: string): void {
+  private static validateName(name: string): void {
     if (name.trim().length === 0) {
       throw new Error("Project name cannot be empty.");
     }
