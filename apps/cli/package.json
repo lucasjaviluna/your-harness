@@ -1,0 +1,30 @@
+{
+  "name": "@your-harness/cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Official CLI for Your Harness.",
+
+  "type": "module",
+
+  "bin": {
+    "yh": "./dist/index.js"
+  },
+
+  "files": [
+    "dist"
+  ],
+
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "clean": "rimraf dist"
+  },
+
+  "dependencies": {},
+
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "rimraf": "^6.0.1"
+  }
+}
