@@ -1,17 +1,17 @@
+import { DomainError } from "../errors/index.js";
+
 /**
  * Represents the result of a domain operation.
- *
- * A Result is either successful or failed.
  */
 export class Result<T> {
   readonly #success: boolean;
   readonly #value?: T;
-  readonly #error?: Error;
+  readonly #error?: DomainError;
 
   private constructor(
     success: boolean,
     value?: T,
-    error?: Error
+    error?: DomainError
   ) {
     this.#success = success;
     this.#value = value;
@@ -19,11 +19,11 @@ export class Result<T> {
   }
 
   static success<T>(value: T): Result<T> {
-    return new Result<T>(true, value);
+    return new Result(true, value);
   }
 
-  static failure<T>(error: Error): Result<T> {
-    return new Result<T>(false, undefined, error);
+  static failure<T>(error: DomainError): Result<T> {
+    return new Result(false, undefined, error);
   }
 
   get isSuccess(): boolean {
@@ -35,22 +35,18 @@ export class Result<T> {
   }
 
   get value(): T {
-    if (!this.#success) {
-      throw new Error(
-        "Cannot access the value of a failed Result."
-      );
+    if (this.isFailure) {
+      throw new Error("Cannot access the value of a failed Result.");
     }
 
     return this.#value as T;
   }
 
-  get error(): Error {
-    if (this.#success) {
-      throw new Error(
-        "Cannot access the error of a successful Result."
-      );
+  get error(): DomainError {
+    if (this.isSuccess) {
+      throw new Error("Cannot access the error of a successful Result.");
     }
 
-    return this.#error as Error;
+    return this.#error as DomainError;
   }
 }
