@@ -3,6 +3,8 @@ import { AggregateRoot } from "@your-harness/shared";
 import { SpecificationId } from "./specification-id.js";
 import { SpecificationStatus } from "./specification-status.js";
 import { SpecificationTitle } from "./specification-title.js";
+import { InvalidSpecificationTransitionError } from "./errors/index.js";
+
 
 /**
  * Represents an engineering specification.
@@ -43,57 +45,61 @@ export class Specification extends AggregateRoot<SpecificationId> {
 
   submitForReview(): Specification {
     if (this.status !== SpecificationStatus.Draft) {
-      throw new Error(
-        "Only draft specifications can be submitted for review."
-      );
-    }
-
-    return new Specification(
-      this.id,
-      this.title,
+    throw new InvalidSpecificationTransitionError(
+      this.status,
       SpecificationStatus.InReview
     );
   }
 
-  approve(): Specification {
-    if (this.status !== SpecificationStatus.InReview) {
-      throw new Error(
-        "Only specifications under review can be approved."
-      );
-    }
+  return new Specification(
+    this.id,
+    this.title,
+    SpecificationStatus.InReview
+  );
+  }
 
-    return new Specification(
-      this.id,
-      this.title,
+  approve(): Specification {
+  if (this.status !== SpecificationStatus.InReview) {
+    throw new InvalidSpecificationTransitionError(
+      this.status,
       SpecificationStatus.Approved
     );
   }
 
-  supersede(): Specification {
-    if (this.status !== SpecificationStatus.Approved) {
-      throw new Error(
-        "Only approved specifications can be superseded."
-      );
-    }
+  return new Specification(
+    this.id,
+    this.title,
+    SpecificationStatus.Approved
+  );
+}
 
-    return new Specification(
-      this.id,
-      this.title,
+  supersede(): Specification {
+  if (this.status !== SpecificationStatus.Approved) {
+    throw new InvalidSpecificationTransitionError(
+      this.status,
       SpecificationStatus.Superseded
     );
   }
 
-  archive(): Specification {
-    if (this.status === SpecificationStatus.Archived) {
-      throw new Error(
-        "Specification is already archived."
-      );
-    }
+  return new Specification(
+    this.id,
+    this.title,
+    SpecificationStatus.Superseded
+  );
+}
 
-    return new Specification(
-      this.id,
-      this.title,
+  archive(): Specification {
+  if (this.status === SpecificationStatus.Archived) {
+    throw new InvalidSpecificationTransitionError(
+      this.status,
       SpecificationStatus.Archived
     );
   }
+
+  return new Specification(
+    this.id,
+    this.title,
+    SpecificationStatus.Archived
+  );
+}
 }
