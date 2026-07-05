@@ -18,11 +18,11 @@ This document reflects the current engineering status and should be updated when
 
 # Current Release
 
-| Property | Value       |
-| -------- | ----------- |
-| Release  | v0.1.0      |
-| Name     | Foundation  |
-| Status   | In Progress |
+| Property | Value |
+|----------|-------|
+| Release | v0.1.0 |
+| Name | Foundation |
+| Status | In Progress |
 
 ---
 
@@ -108,25 +108,25 @@ Future work includes:
 
 # Repository Health
 
-| Area           | Status |
-| -------------- | :----: |
-| Vision         |   ✅   |
-| Documentation  |   ✅   |
-| Governance     |   ✅   |
-| Domain         |   ✅   |
-| Templates      |   ✅   |
-| Implementation |   ⏳   |
+| Area | Status |
+|------|:------:|
+| Vision | ✅ |
+| Documentation | ✅ |
+| Governance | ✅ |
+| Domain | ✅ |
+| Templates | ✅ |
+| Implementation | ⏳ |
 
 ---
 
 # Overall Progress
 
-| Phase                | Status |
-| -------------------- | :----: |
-| Foundation           |   ✅   |
-| Bootstrap Repository |   🚧   |
-| Core Development     |   ⏳   |
-| Initial Release      |   ⏳   |
+| Phase | Status |
+|-------|:------:|
+| Foundation | ✅ |
+| Bootstrap Repository | 🚧 |
+| Core Development | ⏳ |
+| Initial Release | ⏳ |
 
 ---
 
